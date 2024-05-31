@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const baseUrl = 'http://127.0.0.1:8000/'
 
+
 export const createUser = ({ username, password, firstName, lastName }) => {
     axios ({
         method: 'post', 
@@ -22,7 +23,7 @@ export const createUser = ({ username, password, firstName, lastName }) => {
 export const fetchUser = ({ auth }) => {
     axios({
         method: 'get', 
-        url: `${baseUrl}/profiles/`, 
+        url: `${baseUrl}/get-profile/`, 
         headers: {
             Authorization: `Bearer ${auth.accessToken}`
         }
@@ -33,20 +34,36 @@ export const fetchUser = ({ auth }) => {
 
  
 export const getToken = ({ auth, username, password }) => {
-    console.log('Here!!!! get the token')
-    axios.post(`${baseUrl}/token/`, {
+    
+    return axios.post(`${baseUrl}/token/`, {
         username, 
         password
     })
     .then(response => {
         console.log('here is a response ', response)
+        // response.data.accessToken == users proof of being logged in 
+        fetchUser({ auth: { accessToken: response.data.access } })
         auth.setAccessToken(response.data.access)
-        fetchUser({ auth })
     })
     .catch(error => console.log('ERRORRR: ', error))
 }
 
 
+
+
+export const fetchBookList = ({ auth }) => {
+    axios({
+        method: 'get', 
+        url: `${baseUrl}/books/`, 
+        headers: {
+            Authorization: `Bearer ${auth.accessToken}`
+        }
+    }).then(response => {
+        console.log('FETCH USER RESPONSE:', response)
+    }).catch(error => console.log('ERROR: ', error))
+}
+  
+    
 
 
 

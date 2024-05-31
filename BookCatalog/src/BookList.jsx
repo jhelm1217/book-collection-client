@@ -10,13 +10,13 @@ const BookList = () => {
                 setBooks(response.data);
             })
             .catch(error => {
-                console.error('Error fetching books:', error);
+                console.error('ERRORR:', error);
             });
     }, []);
 
     return (
         <div className="book-list">
-            <h2>Book List</h2>
+            <h2>Your Books!</h2>
             <ul>
                 {books.map(book => (
                     <li key={book.id}>{book.title}</li>

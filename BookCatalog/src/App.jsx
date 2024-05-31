@@ -1,11 +1,16 @@
 import { useState } from 'react'
 import './App.css'
+import { Route, Routes } from 'react-router-dom'
+import Login from './Login'
 import BookList from './BookList'
+import Profile from './Profile'
 
 
 function App() {
     <div>
-        < BookList />
+        <Login />
+        <Profile />
+        <BookList />
     </div>
 }
 

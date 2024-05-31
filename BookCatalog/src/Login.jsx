@@ -1,8 +1,15 @@
 import { useContext } from "react"
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
+import { useNavigate } from "react-router-dom"
 import { Link } from 'react'
 import { AuthContext } from "./authContext"
-import { getToken, createUser } from './api'
+import { createUser, getToken } from './api'
+
+// import axios from "axios"
+// import BookList from "./BookList"
+
+import Profile from './Profile'
+
 
 
 const CreateUser = () => {
@@ -63,10 +70,23 @@ function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null);
+  const [navigateAfterLogin, setNavigateAfterLogin] = useState(false);
+
+  const navigate = useNavigate();
 
   const submit = () => {
-    getToken({ auth, username, password, setUser })
-  }
+    getToken({ auth, username, password, setUser }).then((user) => {
+      setUser(user)
+      setNavigateAfterLogin(true);
+    });
+  };
+
+  useEffect(() => {
+    if (navigateAfterLogin) {
+      navigate('/profile', { state: { user } });
+    }
+  }, [navigateAfterLogin, navigate, user]);
+
  
 
 
@@ -90,14 +110,9 @@ function Login() {
 
       <div style= {{ marginTop: 20 }}>
         <button onClick={() => submit()}>Submit</button>
-        </div>
-        {user && (
-        <div>
-          <h2>Welcome, {user.first_name} {user.last_name}</h2>
-          <p>Username: {user.username}</p>
-        </div>
-      )}
 
+        </div>
+        
         <CreateUser user={user} />
 
   </div>
